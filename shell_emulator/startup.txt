@@ -1,4 +1,10 @@
 ls
-cd folder
+cd docs
+ls
+cd inner
+ls
+cd ..
+ls
+cd unknown
+cd note.txt
 badcommand
-ls test
