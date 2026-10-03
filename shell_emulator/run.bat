@@ -1,0 +1,1 @@
+python emulator.py vfs startup.txt
