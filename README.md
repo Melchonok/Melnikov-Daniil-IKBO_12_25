@@ -1,12 +1,20 @@
-# Конфигурационное управление
-
-## Визуализация зависимостей Python-пакетов. Вариант 14
+# Визуализация зависимостей Python-пакетов. Вариант 14
 
 Для запуска нужен Python 3.10 или новее. Визуализатор использует стандартную
-библиотеку. Запускайте команды из папки с этим README.
+библиотеку.
+
+Из корня репозитория запустите демонстрацию в Linux или Git Bash.
+
+```bash
+./run.sh
+```
+
+Скрипт без аргументов строит пример с циклом из тестового репозитория.
+При передаче параметров скрипт запускает CLI с этими параметрами.
+В PowerShell тот же пример можно получить следующей командой.
 
 ```powershell
-python -B -m dependency_graph -p A --test -r example_repository.json -d 4 --ascii
+python -B src/dependency_graph_lab/dependency_graph.py -p A --test -r src/dependency_graph_lab/example_repository.json -d 4 --ascii
 ```
 
 Программа читает `info.requires_dist` из PyPI JSON API по адресу
@@ -22,9 +30,12 @@ python -B -m dependency_graph -p A --test -r example_repository.json -d 4 --asci
 Пакет без зависимостей описывается пустым массивом. Полный тестовый граф
 позволяет развернуть рёбра и найти обратные зависимости тем же DFS.
 
-### Демонстрация этапов
+## Демонстрация этапов
+
+Выполните команды из корня репозитория. Первый блок меняет текущую папку на каталог визуализатора.
 
 ```powershell
+Push-Location -LiteralPath src/dependency_graph_lab
 python -B -m dependency_graph -p A --test -r example_repository.json --show-config
 python -B -m dependency_graph -p A -d -1
 python -B -m dependency_graph -p requests --direct
@@ -42,6 +53,7 @@ python -B -m dependency_graph -p C --test -r example_repository.json -d 3 --reve
 python -B -m dependency_graph -p requests -d 1 --ascii
 python -B -m dependency_graph -p click -d 1 --ascii
 python -B -m dependency_graph -p jinja2 -d 1 --ascii
+Pop-Location
 ```
 
 При сравнении с `pip show` в Windows на локальных метаданных версий
@@ -57,22 +69,14 @@ Requests 2.32.5, Click 8.3.1 и Jinja2 3.1.6 получились такие р�
 сравнении `pip show` учитывает установленную версию и текущее окружение.
 При запросе к PyPI версии и набор объявленных зависимостей могут измениться.
 
-## Эмулятор виртуальной файловой системы
-
-Программа открывает окно Tkinter, загружает файловое дерево из указанной
-папки и выполняет команды `ls`, `cd` и `exit`. Команды стартового
-скрипта выполняются при открытии окна.
-
-```powershell
-python -B shell_emulator/emulator.py shell_emulator/vfs shell_emulator/startup.txt
-```
-
 ## Автоматические тесты
+
+Запустите из корня репозитория.
 
 ```powershell
 python -B -m unittest discover -s tests -v
 ```
 
-Тесты проверяют параметры CLI, обработку метаданных, глубину обхода,
-циклы, обратные связи, визуализацию и команды эмулятора. Они используют
-локальные данные и подменённый HTTP-ответ и запускаются без окна Tkinter.
+Тесты проверяют параметры CLI, обработку метаданных PyPI, глубину обхода,
+циклы, обратные зависимости и визуализацию. Сетевые ответы подменяются
+локальными данными, поэтому для запуска тестов подключение к PyPI не нужно.
