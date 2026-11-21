@@ -1,1 +1,0 @@
-python emulator.py test_vfs test_startup.txt
